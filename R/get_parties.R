@@ -57,7 +57,7 @@ get_parties <- function(corpus) {
           role <- na_if_null(entity[["role"]])
 
         first <-
-          na_if_null(entity[["individualName"]][["givenName"]])
+          na_if_null(handle_multiple(entity[["individualName"]][["givenName"]]))
         sur <- na_if_null(entity[["individualName"]][["surName"]])
         org <- na_if_null(entity[["organizationName"]])
 
@@ -68,9 +68,11 @@ get_parties <- function(corpus) {
           na_if_null(entity[["address"]][["administrativeArea"]])
         country <- na_if_null(entity[["address"]][["country"]])
         zip <- na_if_null(entity[["address"]][["postalCode"]])
-        phone <- na_if_null(entity[["phone"]])
-        email <- na_if_null(entity[["electronicMailAddress"]])
-        web <- na_if_null(entity[["onlineUrl"]])
+        phone <- na_if_null(handle_multiple(entity[["phone"]]))
+        email <- na_if_null(handle_multiple(entity[["electronicMailAddress"]]))
+        web <- na_if_null(handle_multiple(entity[["onlineUrl"]]))
+
+        position <- na_if_null(entity[["positionName"]])
 
         partydf <- data.frame(
           scope = I(scope),
@@ -81,12 +83,13 @@ get_parties <- function(corpus) {
           firstname = I(first),
           surname = sur,
           organization = org,
+          position = position,
           address1 = address,
           city = city,
           state = state,
           country = country,
           zip = zip,
-          phone = I(phone),
+          phone = phone,
           email = I(email),
           online_url = I(web),
           stringsAsFactors = F
