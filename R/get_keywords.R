@@ -39,17 +39,28 @@ get_keywords <- function(corpus) {
       if (!is.null(names(keywords))) keywords <- list(keywords)
       # return(keywords)
       for (k in seq_along(keywords)){
-        key <- data.frame(
+      keyk <- keywords[[k]]
+
+      # sometimes there are no keyword types and the keyword list is unnamed
+      if (is.null(names(keyk))) {
+        keyk <- list(keyword = keyk)
+        key_type <- NA
+      } else key_type <- keyk[["keywordType"]]
+
+
+        keydf <- data.frame(
           scope = scope,
           id = id,
           rev = rev,
-          keyword = keywords[[k]][["keyword"]],
-          keywordtype = keywords[[k]][["keywordType"]],
-          thesaurus = thesaurus,
+
+          # subscript out of bounds here. not sure why.
+          keyword = keyk[["keyword"]],
+          keywordtype = key_type,
+          keyword_thesaurus = thesaurus,
           stringsAsFactors = F
         )
 
-        vw_keywords <- rbind(vw_keywords, key)
+        vw_keywords <- rbind(vw_keywords, keydf)
       }
     }
     # keysetss <- c(keysetss, keysets)
