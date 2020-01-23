@@ -16,28 +16,22 @@
 get_dataset <- function(corpus){
 
   title <- sapply(corpus, function(x) x[["dataset"]][["title"]])
-  short <- sapply(corpus, function(x) x[["dataset"]][["shortName"]])
-  # get string before first period -- scope
-  scope <- sub("\\..*$", "", names(corpus))
- # return(scope)
+  short <- sapply(corpus, function(x) na_if_null(x[["dataset"]][["shortName"]]))
 
-  # get string between the two periods -- datasetid
-  id <- str_extract(names(corpus), "(?<=\\.)(.+)(?=\\.)")
+  pk <- lapply(names(corpus), get_pk)
+  scope <- sapply(pk, `[[`, "scope")
+  id <- sapply(pk, `[[`, "id")
+  rev <- sapply(pk, `[[`, "rev")
 
-  # get string after last period -- revision
-
-  rev <- sub(".*\\.", "", names(corpus))
   # abstracts
-  abstract <- lapply(corpus, function(x) x[["dataset"]][["abstract"]])
+  abstract <- lapply(corpus, function(x) na_if_null(x[["dataset"]][["abstract"]]))
 
   # pubdate
-  pub <- sapply(corpus, function(x) x[["dataset"]][["pubDate"]])
+  pub <- sapply(corpus, function(x) na_if_null(x[["dataset"]][["pubDate"]]))
 
   # maintenance
-  main_desc <- lapply(corpus, function(x) x[["dataset"]][["maintenance"]][["description"]])
-  freq <- sapply(corpus, function(x) x[["dataset"]][["maintenance"]][["maintenanceUpdateFrequency"]])
-  # NULLS to NAs
-  freq <- lapply(freq, function(x) ifelse(is.null(x), NA, x))
+  main_desc <- lapply(corpus, function(x) na_if_null(x[["dataset"]][["maintenance"]][["description"]]))
+  freq <- sapply(corpus, function(x) na_if_null(x[["dataset"]][["maintenance"]][["maintenanceUpdateFrequency"]]))
 
   vw_dataset <- data.frame(packageId = names(corpus),
                            scope = scope,

@@ -18,14 +18,10 @@ get_parties <- function(corpus) {
 
   # loop through each EML doc in corpus
   for (i in seq_along(corpus)) {
-    scope <- sub("\\..*$", "", names(corpus)[[i]])
-
-    # get string between the two periods -- datasetid
-    id <- str_extract(names(corpus), "(?<=\\.)(.+)(?=\\.)")[[i]]
-
-    # get string after last period -- revision
-
-    rev <- sub(".*\\.", "", names(corpus))[[i]]
+    pk <- get_pk(names(corpus)[[i]])
+    scope <- pk[["scope"]]
+    id <- pk[["id"]]
+    rev <- pk[["rev"]]
 
     parties <-
       purrr::compact(corpus[[i]][["dataset"]][c("creator",
@@ -69,7 +65,8 @@ get_parties <- function(corpus) {
         country <- na_if_null(entity[["address"]][["country"]])
         zip <- na_if_null(entity[["address"]][["postalCode"]])
         phone <- na_if_null(handle_multiple(entity[["phone"]]))
-        email <- na_if_null(handle_multiple(entity[["electronicMailAddress"]]))
+        email <-
+          na_if_null(handle_multiple(entity[["electronicMailAddress"]]))
         web <- na_if_null(handle_multiple(entity[["onlineUrl"]]))
 
         position <- na_if_null(entity[["positionName"]])

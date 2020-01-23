@@ -16,14 +16,10 @@ get_coverage_geo <- function(corpus){
   vw_geo_cov <- data.frame()
 
   for (i in seq_along(corpus)) {
-    scope <- sub("\\..*$", "", names(corpus)[[i]])
-
-    # get string between the two periods -- datasetid
-    id <- str_extract(names(corpus), "(?<=\\.)(.+)(?=\\.)")[[i]]
-
-    # get string after last period -- revision
-
-    rev <- sub(".*\\.", "", names(corpus))[[i]]
+    pk <- get_pk(names(corpus)[[i]])
+    scope <- pk[["scope"]]
+    id <- pk[["id"]]
+    rev <- pk[["rev"]]
 
     covs <- corpus[[i]][["dataset"]][["coverage"]][["geographicCoverage"]]
     if (!is.null(names(covs))) covs <- list(covs)

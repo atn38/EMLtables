@@ -19,14 +19,10 @@ get_keywords <- function(corpus) {
   keysetss <- list()
 
   for (i in seq_along(corpus)) {
-    scope <- sub("\\..*$", "", names(corpus)[[i]])
-
-    # get string between the two periods -- datasetid
-    id <- str_extract(names(corpus), "(?<=\\.)(.+)(?=\\.)")[[i]]
-
-    # get string after last period -- revision
-
-    rev <- sub(".*\\.", "", names(corpus))[[i]]
+    pk <- get_pk(names(corpus)[[i]])
+    scope <- pk[["scope"]]
+    id <- pk[["id"]]
+    rev <- pk[["rev"]]
 
     keysets <- corpus[[i]][["dataset"]][["keywordSet"]]
     if (!is.null(names(keysets))) keysets <- list(keysets)
