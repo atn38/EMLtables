@@ -31,7 +31,7 @@ get_attributes <- function(corpus) {
         attdf <- EML::get_attributes(x = dt[["attributeList"]],
                                      eml = corpus[[i]])
         how_many <- nrow(attdf[["attributes"]])
-        print(how_many)
+        # print(how_many)
         attdf2 <- data.frame(
           stringsAsFactors = F,
           scope = rep(scope, how_many),
@@ -40,11 +40,11 @@ get_attributes <- function(corpus) {
           entityposition = rep(j, how_many)
         )
 
-        print(str(attdf[["attributes"]]))
+        # print(str(attdf[["attributes"]]))
 
-        # attdf <- data.frame(attdf, attdf2)
+        attdf <- dplyr::bind_cols(attdf2,attdf[["attributes"]])
 
-        vw_att <- rbind(vw_att, attdf[["attributes"]])
+        vw_att <- dplyr::bind_rows(vw_att, attdf)
       }
     }
 
