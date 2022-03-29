@@ -1,14 +1,12 @@
-Package: MetaInbase
+Package: pkEML
 Type: Package
-Title: Convert corpus of Ecological Metadata Language (EML) documents to table form
+Title: Convert corpus of Ecological Metadata Language (EML) documents to tabular form and consolidate re-used metadata elements. 
 Version: 0.1.0
 Author: c(person(given = "An T.", family = "Nguyen",
        email = "enthusiast@utexas.edu", role = c("aut", "cre")))
-Description: Use MetaInbase to convert an existing corpus of Ecological Metadata Language (EML) documents to table form. 
-    This is developed with the intention to help established LTER sites import their EML corpus into LTER-core-metabase.
-    See https://github.com/lter/LTER-core-metabase.
-    However, other uses are possible.
+Description: Use this package to convert an existing corpus of Ecological Metadata Language (EML) documents into table form, plus identify and consolidate re-used metadata elements. Existing metadata can then be imported or migrated into a relational database system with re-usable metadata elements (with "primary keys" hence pkEML).
+    This package is developed with the intention to help established LTER sites import their EML corpus into LTER-core-metabase. See https://github.com/lter/LTER-core-metabase. However please use to whatever use you may find, and 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2
