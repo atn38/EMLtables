@@ -1,4 +1,4 @@
-#' handles instances where there are multiple in a list and collapses them
+#' handles instances where there are multiple in a list and collapses them int a string
 #' @param x
 #' @param paste
 
@@ -35,7 +35,8 @@ null2na <- function(x) {
 }
 
 
-#' Take the package ID and break it down into scope, id, and revision number.
+#' Parse packageId
+#' @description Take the packageId field in EML and break it down into scope, id, and revision number. If packageId does not conform to the scope, id, revision number pattern, the function will just return the whole ID in each field.
 #'
 #' @param full_id (character) Package ID in EML style, e.g. "knb-lter-mcr.1.1"
 #' @return List of three items: "scope", "id", "rev".
@@ -43,9 +44,31 @@ null2na <- function(x) {
 
 parse_packageId <- function(full_id) {
   stopifnot(is.character(full_id), length(full_id) == 1)
-  return(list(
-    scope = sub("\\..*$", "", full_id), # string before first period
-    id = stringr::str_extract(full_id, "(?<=\\.)(.+)(?=\\.)"), # number between the two periods
-    rev = sub(".*\\.", "", full_id) # number after second period
-  ))
+  if(!grepl("[^A-Za-z0-9 .]", full_id) && # check that string only has A-Z, a-z, numeric, and periods
+     nchar(gsub("[^.]", "", full_id)) == 2  && # check that string has exactly two periods
+     !startsWith(full_id, ".") && # doesnt start with a period
+     !endsWith(full_id, ".") # doesnt end with a period
+     ) {
+    x <- list(
+      scope = sub("\\..*$", "", full_id), # string before first period
+      id = stringr::str_extract(full_id, "(?<=\\.)(.+)(?=\\.)"), # number between the two periods
+      rev = sub(".*\\.", "", full_id) # number after second period
+    )
+  } else x <- list(scope = full_id,
+                   id = full_id,
+                   rev = full_id)
+
+  return(x)
+}
+
+
+#' Remove context
+#'
+#' @param x
+#'
+#' @return
+#' @examples
+remove_context <- function(x){
+
+
 }
