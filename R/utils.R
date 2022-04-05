@@ -44,7 +44,7 @@ null2na <- function(x) {
 
 parse_packageId <- function(full_id) {
   stopifnot(is.character(full_id), length(full_id) == 1)
-  if(!grepl("[^A-Za-z0-9 .]", full_id) && # check that string only has A-Z, a-z, numeric, and periods
+  if(!grepl("[^A-Za-z0-9 . -]", full_id) && # check that string only has A-Z, a-z, numeric, dashes, and periods
      nchar(gsub("[^.]", "", full_id)) == 2  && # check that string has exactly two periods
      !startsWith(full_id, ".") && # doesnt start with a period
      !endsWith(full_id, ".") # doesnt end with a period
