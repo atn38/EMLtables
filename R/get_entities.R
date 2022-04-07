@@ -1,77 +1,83 @@
+#' Title
 #'
+#' @param corpus
 #'
+#' @return
+#' @export
 #'
-#'
-#'
-#'
-#'
-#'
-#'
-
+#' @examples
 get_entities <- function(corpus) {
-  ents <- list()
-  vw_entities <- data.frame()
+  vw_entities <- list()
+  vw_atts <- list()
 
   # loop through each EML doc in corpus
   for (i in seq_along(corpus)) {
-
-    pk <- get_pk(names(corpus)[[i]])
+    pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
     id <- pk[["id"]]
     rev <- pk[["rev"]]
 
-    entities <-
-      purrr::compact(corpus[[i]][["dataset"]][c("dataTable", "otherEntity")])
+    ent_groups <-
+      purrr::compact(corpus[[i]][["dataset"]][c("dataTable",
+                                                "spatialVector",
+                                                "spatialRaster",
+                                                "otherEntity",
+                                                "view")])
+    # exit if no entities found
+    if (is.null(ent_groups))
+      return()
+    entgroupdf <- list()
+    # attgroupdf <- list()
+    # loop through each entity group
+    for (j in seq_along(ent_groups)) {
+      ents <- handle_one(ent_groups[[j]])
 
-    # loop through each entity
+      # loop through each entity in each entity group
+      ent_list <- lapply(seq_along(ents), function(x) {
 
-    for (j in seq_along(entities)) {
-      ent <- entities[[j]]
-      if (!all(is.null(names(ent))))
-        ent <- list(ent)
-      if (names(entities)[[j]] == "dataTable") {
-        for (k in seq_along(ent)) {
+        info <- data.frame(scope = scope,
+        id = id,
+        rev = rev,
+        entity = paste0(j, x),
+        entitytype = paste0(names(ent_groups)[[j]]),
+        stringsAsFactors = F)
 
-          dt <- ent[[k]]
+        entdf2 <- parse_entity(ents[[x]])
 
-          entdf <- data.frame(
-            scope = scope,
-            id = id,
-            rev = rev,
-            entityposition = paste0(j, k),
-            entitytype = "dataTable",
-            entityname = dt[["entityName"]],
-            entitydescription = I(dt[["entityDescription"]]),
-            stringsAsFactors = F
-          )
-          vw_entities <- rbind(vw_entities, entdf)
-        }
-      } else if (names(entities)[[j]] == "otherEntity") {
-        for (k in seq_along(ent)) {
-
-          oe <- ent[[k]]
-
-          entdf <- data.frame(
-            scope = scope,
-            id = id,
-            rev = rev,
-            entityposition = paste0(j, k),
-            entitytype = "otherEntity",
-            entityname = oe[["entityName"]],
-            entitydescription = I(oe[["entityDescription"]]),
-            stringsAsFactors = F
-          )
-          vw_entities <- rbind(vw_entities, entdf)
-        }
-      }
-
-
-      # if (!all(is.null(names(dt)))) dt <- list(dt)
-
-
-      # ents <- c(ents, ent)
+        # # get attributes
+        # atts <- parse_attributeList(x = ents[[x]], eml = corpus[[i]])
+        # n <- nrow(atts)
+        # attdf <- cbind(info[rep(seq_len(nrow(info)), each = n), ], atts)
+        return(cbind(info, entdf2))
+      })
+      entgroupdf[[j]] <- data.table::rbindlist(ent_list, fill = TRUE)
+      # attgroupdf[[j]] <- data.table::rbindlist(ent_list[[att]], fill = TRUE)
     }
+    vw_entities[[i]] <- data.table::rbindlist(entgroupdf, fill = TRUE)
+    # vw_atts[[i]] <- data.table::rbindlist(attgroupdf, fill = TRUE)
   }
 
-  return(vw_entities)
+  return(data.table::rbindlist(vw_entities, fill = TRUE))
+}
+
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_entity <- function(ent) {
+  data.frame(
+    entityname = ent$entityName,
+    entitydescription = trimws(I(null2na(
+      ent$entityDescription
+    ))),
+    nrow = null2na(ent$numberOfRecords),
+    filename = null2na(ent$physical$objectName),
+    filesize = null2na(ent$physical$size$size),
+    filesizeunit = null2na(ent$physical$size$unit),
+    checksum = null2na(ent$physical$authentication$authentication),
+    stringsAsFactors = F
+  )
 }
