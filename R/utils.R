@@ -61,6 +61,29 @@ parse_packageId <- function(full_id) {
   return(x)
 }
 
+#' Title
+#'
+#' @param x (list) node to check
+#' @param element_names (character) Name or vector of descending names to check
+#'
+#' @return
+#'
+#' @examples
+recursive_check <- function(x, element_names) {
+  check <- TRUE
+  for (i in seq_along(element_names)) {
+    if (i == 1) {
+      if (!element_names[[1]] %in% names(x))
+        check <- FALSE
+    }
+    else {
+      if (!element_names[[i]] %in% names(x[[element_names[1:(i - 1)]]]))
+        check <- FALSE
+    }
+  }
+  return(check)
+}
+
 
 #' Remove context
 #'
