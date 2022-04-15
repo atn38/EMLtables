@@ -1,51 +1,30 @@
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-
+#' Title
+#' @param corpus
+#' @return
+#' @export
 get_coverage_geo <- function(corpus){
-  vw_geo_cov <- data.frame()
+  get_multilevel_element(corpus = corpus,
+                         element_names = c("coverage", "geographicCoverage"),
+                         parse_function = parse_geocov)
+}
 
-  for (i in seq_along(corpus)) {
-    pk <- get_pk(names(corpus)[[i]])
-    scope <- pk[["scope"]]
-    id <- pk[["id"]]
-    rev <- pk[["rev"]]
-
-    covs <- corpus[[i]][["dataset"]][["coverage"]][["geographicCoverage"]]
-    if (!is.null(names(covs))) covs <- list(covs)
-    for (j in seq_along(covs)){
-      cov <- covs[[j]]
-
-      covdf <- data.frame(
-        stringsAsFactors = F,
-        scope = scope,
-        id = id,
-        rev = rev,
-        desc = na_if_null(cov[["geographicDescription"]]),
-        west = na_if_null(cov[["boundingCoordinates"]][["westBoundingCoordinate"]]),
-        east = na_if_null(cov[["boundingCoordinates"]][["eastBoundingCoordinate"]]),
-        north = na_if_null(cov[["boundingCoordinates"]][["northBoundingCoordinate"]]),
-        south = na_if_null(cov[["boundingCoordinates"]][["southBoundingCoordinate"]]),
-        altitude_min = na_if_null(cov[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeMinimum"]]),
-        altitude_max = na_if_null(cov[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeMaximum"]]),
-        altitude_unit = na_if_null(cov[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeUnits"]])
-      )
-
-      vw_geo_cov <- rbind(vw_geo_cov, covdf)
-    }
-
-
-  }
-return(vw_geo_cov)
-
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_geocov <- function(x) {
+  data.frame(
+    stringsAsFactors = F,
+    desc = null2na(x[["geographicDescription"]]),
+    west = null2na(x[["boundingCoordinates"]][["westBoundingCoordinate"]]),
+    east = null2na(x[["boundingCoordinates"]][["eastBoundingCoordinate"]]),
+    north = null2na(x[["boundingCoordinates"]][["northBoundingCoordinate"]]),
+    south = null2na(x[["boundingCoordinates"]][["southBoundingCoordinate"]]),
+    altitude_min = null2na(x[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeMinimum"]]),
+    altitude_max = null2na(x[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeMaximum"]]),
+    altitude_unit = null2na(x[["boundingCoordinates"]][["boundingAltitudes"]][["altitudeUnits"]])
+  )
 }
