@@ -104,7 +104,7 @@ parse_attributeList <- function(x, eml = NULL) {
       }
     }
   }
-  attributes <- lapply(attributeList$attribute, parse_attribute)
+  attributes <- lapply(handle_one(attributeList$attribute), parse_attribute)
   attributes <- data.table::rbindlist(attributes, fill = T)
   ## remove non_fields in attributes
   non_fields <- c("enforced",
