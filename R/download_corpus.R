@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-get_corpus <- function(scope, path, EDI_env = "production") {
+download_corpus <- function(scope, path, EDI_env = "production") {
   stopifnot(is.character(scope), dir.exists(path))
   # find the newest revision
   n <- EDIutils::list_data_package_identifiers(scope = scope,
@@ -30,4 +30,5 @@ get_corpus <- function(scope, path, EDI_env = "production") {
     xml2::write_xml(x = xml, file = file.path(path, paste0(x, ".xml")))
     message(paste0("Writing file ", x, ".xml to path."))
   }))
+   message("Done.")
 }
