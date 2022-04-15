@@ -1,66 +1,66 @@
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
 
+#' Title
+#'
+#' @param corpus
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_keywords <- function(corpus) {
-  vw_keywords <- data.frame()
-  keysetss <- list()
-
+  vw <- list()
   for (i in seq_along(corpus)) {
-    pk <- get_pk(names(corpus)[[i]])
+    pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
     id <- pk[["id"]]
     rev <- pk[["rev"]]
-
-    keysets <- corpus[[i]][["dataset"]][["keywordSet"]]
-    if (!is.null(names(keysets))) keysets <- list(keysets)
-    for (j in seq_along(keysets)) {
-      thesaurus <- keysets[[j]][["keywordThesaurus"]]
-      if (is.null(thesaurus))
-        thesaurus <- "none"
-
-      keywords <- keysets[[j]][["keyword"]]
-      if (!is.null(names(keywords))) keywords <- list(keywords)
-      # return(keywords)
-      for (k in seq_along(keywords)){
-      keyk <- keywords[[k]]
-
-      # sometimes there are no keyword types and the keyword list is unnamed
-      if (is.null(names(keyk))) {
-        keyk <- list(keyword = keyk)
-        key_type <- NA
-      } else key_type <- keyk[["keywordType"]]
-
-
-        keydf <- data.frame(
-          scope = scope,
-          id = id,
-          rev = rev,
-
-          # subscript out of bounds here. not sure why.
-          keyword = keyk[["keyword"]],
-          keywordtype = key_type,
-          keyword_thesaurus = thesaurus,
-          stringsAsFactors = F
-        )
-
-        vw_keywords <- rbind(vw_keywords, keydf)
-      }
+    klist <- list()
+    if ("keywordSet" %in% names(corpus[[i]][["dataset"]])) {
+      keysets <- handle_one(corpus[[i]][["dataset"]][["keywordSet"]])
+      klist <-
+        data.table::rbindlist(lapply(seq_along(keysets), function(x) parse_keywordset(keysets[[x]])), fill = TRUE)
+      klist$id <- id
+      klist$scope <- scope
+      klist$rev <- rev
+      klist <- subset(klist, select = c(4:6, 1:3))
     }
-    # keysetss <- c(keysetss, keysets)
-
+    vw[[i]] <- klist
   }
-  return(vw_keywords)
+  return(data.table::rbindlist(vw))
+}
+
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_keywordset <- function(x) {
+  keywords <- handle_one(x[["keyword"]])
+  df <- data.table::rbindlist(lapply(seq_along(keywords), function(x) parse_keyword(keywords[[x]])))
+  df$thesaurus <- null2na(x[["keywordThesaurus"]])
+  return(df)
+}
+
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_keyword <- function(x) {
+  # sometimes there are no keyword types and the keyword list is unnamed
+  if (is.null(names(x))) {
+    x <- list(keyword = x)
+    key_type <- NA
+  } else key_type <- x[["keywordType"]]
+
+  data.frame(
+    # subscript out of bounds here. not sure why.
+    keyword = x[["keyword"]],
+    keywordtype = key_type,
+    stringsAsFactors = F
+  )
 }
