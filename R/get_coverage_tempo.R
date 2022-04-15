@@ -1,40 +1,44 @@
-#'
-#'
-#'
-#'
-#'
-#'
 
 
+#' Title
+#'
+#' @param corpus
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_coverage_tempo <- function(corpus) {
-  vw_cov_temp <- data.frame()
+  get_multilevel_element(corpus = corpus,
+                         element_names =  c("coverage", "temporalCoverage"),
+                         parse_function = parse_tempocov)
+}
 
-  for (i in seq_along(corpus)) {
-    pk <- get_pk(names(corpus)[[i]])
-    scope <- pk[["scope"]]
-    id <- pk[["id"]]
-    rev <- pk[["rev"]]
-
-    covs <-
-      corpus[[i]][["dataset"]][["coverage"]][["temporalCoverage"]]
-    if (!is.null(names(covs)))
-      covs <- list(covs)
-
-    for (j in seq_along(covs)) {
-      cov <- covs[[j]]
-
-      covdf <- data.frame(
-        stringsAsFactors = F,
-        scope = scope,
-        id = id,
-        rev = rev,
-        begin = na_if_null(cov[["rangeOfDates"]][["beginDate"]][["calendarDate"]]),
-        end = na_if_null(cov[["rangeOfDates"]][["endDate"]][["calendarDate"]])
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_tempocov <- function(x) {
+  if ("singleDateTime" %in% names(x)) {
+    dates <- handle_one(x[["singleDateTime"]])
+    data.table::rbindlist(lapply(seq_along(dates), function(x) {
+      data.frame(
+        datetype = "single date",
+        begin = null2na(dates[[x]][["calendarDate"]]),
+        end = null2na(dates[[x]][["calendarDate"]]),
+        alternativeTimeScaleName = null2na(dates[[x]][["alternativeTimeScale"]][["timeScaleName"]]),
+        alternativeTimeScaleAgeEstimate = null2na(dates[[x]][["alternativeTimeScale"]][["timeScaleAgeEstimate"]])
       )
-
-      vw_cov_temp <- rbind(vw_cov_temp, covdf)
-    }
+    }))
+  } else if ("rangeOfDates" %in% names(x)) {
+    data.frame(datetype = "range of dates",
+               begin = null2na(x[["rangeOfDates"]][["beginDate"]][["calendarDate"]]),
+               end = null2na(x[["rangeOfDates"]][["endDate"]][["calendarDate"]]),
+    alternativeTimeScaleName = null2na(x[["rangeOfDates"]][["alternativeTimeScale"]][["timeScaleName"]]),
+    alternativeTimeScaleAgeEstimate = null2na(x[["rangeOfDates"]][["alternativeTimeScale"]][["timeScaleAgeEstimate"]])
+    )
   }
-
-  return(vw_cov_temp)
 }
