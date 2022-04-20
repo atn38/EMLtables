@@ -12,6 +12,7 @@
 #' @examples
 download_corpus <- function(scope, path, EDI_env = "production") {
   stopifnot(is.character(scope), dir.exists(path))
+  message("Querying EDI for latest data identifiers...")
   # find the newest revision
   n <- EDIutils::list_data_package_identifiers(scope = scope,
                                                  env = EDI_env)
@@ -23,6 +24,8 @@ download_corpus <- function(scope, path, EDI_env = "production") {
                                                  env = EDI_env)
     return(paste(scope, x, rev, sep = "."))
   })
+
+  message("Starting download:")
 
    invisible(sapply(full_ids, function(x) {
     xml <- EDIutils::read_metadata(packageId = x,
