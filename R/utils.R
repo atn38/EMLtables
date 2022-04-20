@@ -36,10 +36,10 @@ null2na <- function(x) {
 
 
 #' Parse packageId
-#' @description Take the packageId field in EML and break it down into scope, id, and revision number. If packageId does not conform to the scope, id, revision number pattern, the function will just return the whole ID in each field.
+#' @description Take the packageId field in EML and break it down into scope, id, and revision number. If packageId does not conform to the scope, id, revision number pattern, the function will just return the whole ID in the "id" field and NAs in the "scope" and "rev" fields.
 #'
 #' @param full_id (character) Package ID in EML style, e.g. "knb-lter-mcr.1.1"
-#' @return List of three items: "scope", "id", "rev".
+#' @return List of three named items: "scope", "id", "rev".
 #' @importFrom stringr str_extract
 
 parse_packageId <- function(full_id) {
@@ -54,9 +54,9 @@ parse_packageId <- function(full_id) {
       id = stringr::str_extract(full_id, "(?<=\\.)(.+)(?=\\.)"), # number between the two periods
       rev = sub(".*\\.", "", full_id) # number after second period
     )
-  } else x <- list(scope = full_id,
+  } else x <- list(scope = NA,
                    id = full_id,
-                   rev = full_id)
+                   rev = NA)
 
   return(x)
 }
