@@ -9,7 +9,8 @@
 #'
 #' @examples
 get_multilevel_element <- function(corpus, element_names, parse_function) {
-  stopifnot(is.list(corpus), is.function(parse_function), is.character(element_names))
+  stopifnot(is.list(corpus), is.function(parse_function), is.character(element_names), length(element_names) >= 1)
+  e <- if (length(element_names) == 1) element_names else element_names[-1]
   vw <- list()
   for (i in seq_along(corpus)) {
     eml <- corpus[[i]]
@@ -24,11 +25,13 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
       da <- handle_one(eml[["dataset"]][[element_names]])
       ddf <-
         data.table::rbindlist(lapply(seq_along(da), function(x)
-          parse_function(da[[x]])), fill = TRUE)
+          cbind(data.frame(a = x), parse_function(da[[x]]))),
+          fill = TRUE)
+      names(ddf)[[1]] <- e
       n <- ncol(ddf)
       cols <- c((n+1):(n+7), 1:n)
       ddf$scope <- scope
-      ddf$id <- id
+     ddf$id <- id
       ddf$rev <- rev
       ddf$entity <- NA
       ddf$entitytype <- NA
@@ -57,8 +60,9 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
             ea <- handle_one(ent[[element_names]])
             edf <-
               data.table::rbindlist(lapply(seq_along(ea), function(x)
-                parse_function(ea[[x]])),
+                cbind(data.frame(a = x), parse_function(ea[[x]]))),
                 fill = TRUE)
+            names(edf)[[1]] <- e
             n <- ncol(edf)
             cols <- c((n+1):(n+7), 1:n)
             edf$scope <- scope
@@ -83,8 +87,9 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
                   aa <- handle_one(att[[element_names]])
                   adf <-
                     data.table::rbindlist(lapply(seq_along(aa), function(x)
-                      parse_function(aa[[x]])),
+                      cbind(data.frame(a = x), parse_function(aa[[x]]))),
                       fill = TRUE)
+                  names(adf)[[1]] <- e
                   n <- ncol(adf)
                   cols <- c((n+1):(n+7), 1:n)
                   adf$scope <- scope
@@ -106,7 +111,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
       }
     }
     vw[[i]] <-
-      rbind(ddf, data.table::rbindlist(groupdf, fill = TRUE), fill = TRUE)
+      rbind(ddf, data.table::rbindlist(groupdf, fill = TRUE))
   }
   return(data.table::rbindlist(vw, fill = TRUE))
 }
