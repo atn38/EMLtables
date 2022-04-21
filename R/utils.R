@@ -63,6 +63,37 @@ parse_packageId <- function(full_id) {
 
 #' Title
 #'
+#' @param x (list or character) text node
+#'
+#' @return
+#'
+#' @examples
+parse_text <- function(x) {
+  a <- type <- NA
+  if (is.character(x)) {
+    a <- x
+    type <- "plaintext"
+  }
+  if (is.list(x)) {
+    if ("markdown" %in% names(x)) {
+      a <- as.character(x[["markdown"]])
+      type <- "markdown"
+    } else {
+      a <- a[!names(a) %in% c("@context", "@type")]
+      a <- as.character(emld::as_xml(x))
+      a <- gsub("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", a)
+      a <- stringr::str_remove(a, ".*xsd\">")
+      a <- stringr::str_remove(a, "</eml:eml>")
+      substr(a, 1, 40) <- ""
+      type <- "docbook"
+    }
+  } else {
+    a <- as.character(x)
+  }
+  return(list(text = a, type = type))
+}
+#' Title
+#'
 #' @param x (list) node to check
 #' @param element_names (character) Name or vector of descending names to check
 #'
