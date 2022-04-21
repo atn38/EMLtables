@@ -37,6 +37,7 @@ get_attribute_codes <- function(corpus) {
                 c$attribute <- x
               return(c)
             }))
+            }), fill = TRUE)
           if (!is.null(codedf) & nrow(codedf) > 0) {
             n <- nrow(codedf)
             info <-
@@ -97,6 +98,7 @@ parse_attribute_code <- function(x) {
     # print(factors)
     ## linearize factors
     factors <- lapply(factors$codeDefinition, function(x) {
+    factors <- lapply(handle_one(factors$codeDefinition), function(x) {
       as.data.frame(x, stringsAsFactors = FALSE)
     })
     factors <- do.call(rbind, factors)
