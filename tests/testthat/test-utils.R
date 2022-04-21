@@ -13,3 +13,10 @@ test_that("parse_packageId", {
 ", rev = NA))
   expect_equal(parse_packageId("urn:uuid:6229a977-0986-4f1f-a8df-1d5101131eaf"), list(scope = NA, id = "urn:uuid:6229a977-0986-4f1f-a8df-1d5101131eaf", rev = NA))
 })
+
+test_that("recursive_check", {
+  expect_true(recursive_check(list(a = list(b = list(c = "item"))), c("a", "b")))
+  expect_true(recursive_check(list(a = list(b = list(c = "item"))), c("a", "b", "c")))
+  expect_false(recursive_check(list(a = list(b = list(c = "item"))), c("a", "c")))
+  expect_false(recursive_check(list(a = list(b = list(c = "item"), c = "d")), c("a", "c", "c")))
+})
