@@ -77,6 +77,9 @@ parse_attribute_code <- function(x) {
     domain_deepest <- y[grepl("Domain", y)]
   } else
     domain_deepest <- domain[grepl("Domain", domain)]
+  if (measurementScale == "dateTime" & (is.null(domain_deepest) || length(domain_deepest) == 0)){
+    domain_deepest <- "dateTimeDomain"
+  }
   codes <- handle_one(x$missingValueCode)
 
   if (domain_deepest != "enumeratedDomain" &&
