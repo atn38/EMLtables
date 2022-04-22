@@ -142,9 +142,7 @@ resolve_reference <- function(x, element_name, eml) {
     ref <- x$references
     allx <- EML::eml_get(eml, element_name)
     for (i in seq_along(allx)) {
-      xi <- allx[[i]]
-      if (!is.null(names(xi)))
-        xi <- list(xi)
+      xi <- handle_one(allx[[i]])
       for (j in seq_along(xi)) {
         xj <- xi[[j]]
         if ("id" %in% names(xj)) {
