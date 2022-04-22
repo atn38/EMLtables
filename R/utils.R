@@ -126,3 +126,52 @@ remove_context <- function(x){
 
 
 }
+
+#' Title
+#'
+#' @param x (list) node of element
+#' @param eml (list) full EML doc
+#' @param element_name (character) name of element
+#'
+#' @return
+#'
+#' @examples
+resolve_reference <- function(x, element_name, eml) {
+  if ("references" %in% names(x)) {
+    ref <- x$references
+    allx <- EML::eml_get(eml, element_name)
+    for (i in seq_along(allx)) {
+      xi <- allx[[i]]
+      if (!is.null(names(xi)))
+        xi <- list(xi)
+      for (j in seq_along(xi)) {
+        xj <- xi[[j]]
+        if ("id" %in% names(xj)) {
+          if (xj$id == ref) {
+            x <- xj
+            break
+          }
+        }
+
+      }
+
+    }
+  }
+  return(x)
+}
+
+resolve_reference_all <- function(eml) {
+  rrapply::rrapply(
+    object = eml,
+    f = function(x, .xname) {
+      if (!is.null(.xname)) {
+        resolve_reference(x = x,
+                          element_name = .xname,
+                          eml = eml)
+      }
+    }
+    ,
+    how = "recurse",
+    classes = "list"
+  )
+}
