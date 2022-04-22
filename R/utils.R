@@ -101,6 +101,7 @@ parse_text <- function(x) {
 #'
 #' @examples
 recursive_check <- function(x, element_names) {
+  stopifnot(is.list(x), is.character(element_names))
   check <- TRUE
   for (i in seq_along(element_names)) {
     if (i == 1) {
