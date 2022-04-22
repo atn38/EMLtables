@@ -9,14 +9,17 @@
 
 import_corpus <- function(path, revision_pk = F) {
   stopifnot(dir.exists(path))
-  corpus_emld <-
-    lapply(list.files(path, pattern = ".xml", full.names = T),
-           EML::read_eml)
+  message("Starting import...")
+  corpus_emld <- lapply(lapply(
+    list.files(path, pattern = ".xml", full.names = T),
+    EML::read_eml
+  ), resolve_reference_all)
+  message("Getting packageIds to use as names...")
   ids <-
     unlist(sapply(corpus_emld, EML::eml_get, element = "packageId")[c(TRUE, FALSE)])
   names(corpus_emld) <- ids
   no_revs <- sub('.[^.]*$', '', ids) # extract just the scope and ID
-
+  message("Checking for duplicate Ids...")
   # check for duplicate packageIDs
   if (revision_pk & any(duplicated(ids))) {
     warning(
@@ -33,7 +36,6 @@ import_corpus <- function(path, revision_pk = F) {
       )
     )
   }
-
-
+  message("Done.")
   return(corpus_emld)
 }
