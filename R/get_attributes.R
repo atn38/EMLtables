@@ -162,22 +162,9 @@ parse_attribute <- function(x) {
   att <- att[!grepl("methods", names(att))]
 
   ## Alter names to be consistent with other tools
-  names(att) <- gsub("missingValueCode.code",
-                      "missingValueCode",
-                      names(att),
-                      fixed = TRUE)
   names(att) <- gsub("standardUnit|customUnit",
                       "unit",
                       names(att))
-  ## Alter names of annotation label fields for accessibility
-  names(att) <- gsub("annotation.valueURI.label",
-                      "valueLabel",
-                      names(att),
-                      fixed = TRUE)
-  names(att) <- gsub("annotation.propertyURI.label",
-                      "propertyLabel",
-                      names(att),
-                      fixed = TRUE)
   names(att) <- gsub(".+\\.+",
                       "",
                       names(att))
