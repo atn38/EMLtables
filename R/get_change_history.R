@@ -1,42 +1,31 @@
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
 
+#' Title
+#'
+#' @param corpus
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_changehistory <- function(corpus) {
-  vw_change <- data.frame()
+get_datasetlevel_element(corpus = corpus,
+                         element_names = c("maintenance", "changeHistory"),
+                         parse_function = parse_changehistory)
+}
 
-  for (i in seq_along(corpus)) {
-    pk <- get_pk(names(corpus)[[i]])
-    scope <- pk[["scope"]]
-    id <- pk[["id"]]
-    rev <- pk[["rev"]]
-
-    changes <-
-      handle_one(corpus[[i]][["dataset"]][["maintenance"]][["changeHistory"]])
-    for (j in seq_along(changes)) {
-      change <- changes[[j]]
-
-      changedf <- data.frame(
-        stringsAsFactors = F,
-        scope = scope,
-        id = id,
-        rev = rev,
-        change_scope = na_if_null(change[["changeScope"]]),
-        date = na_if_null(change[["changeDate"]]),
-        old_value = na_if_null(change[["oldValue"]]),
-        new_value = na_if_null(change[["newValue"]]),
-        note = na_if_null(change[["comment"]])
-      )
-      vw_change <- rbind(vw_change, changedf)
-    }
-
-  }
-  return(vw_change)
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#'
+#' @examples
+parse_changehistory <- function(x) {
+  data.frame(
+    change_scope = null2na(x[["changeScope"]]),
+    date = null2na(x[["changeDate"]]),
+    old_value = null2na(x[["oldValue"]]),
+    new_value = null2na(x[["newValue"]]),
+    note = null2na(x[["comment"]])
+  )
 }
