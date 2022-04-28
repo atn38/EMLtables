@@ -14,7 +14,7 @@ get_datasetlevel_element <-
     for (i in seq_along(corpus)) {
       pk <- parse_packageId(names(corpus)[[i]])
       scope <- pk[["scope"]]
-      id <- pk[["id"]]
+      id <- pk[["datasetid"]]
       rev <- pk[["rev"]]
 
       ddf <- data.frame()
@@ -26,7 +26,7 @@ get_datasetlevel_element <-
         n <- ncol(ddf)
         cols <- c((n+1):(n+3), 1:n)
         ddf$scope <- scope
-        ddf$id <- id
+        ddf$datasetid <- id
         ddf$rev <- rev
         ddf <- subset(ddf, select = cols)
       }

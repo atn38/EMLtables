@@ -13,7 +13,7 @@ get_attribute_codes <- function(corpus) {
   for (i in seq_along(corpus)) {
     pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
-    datasetid <- pk[["id"]]
+    datasetid <- pk[["datasetid"]]
     rev <- pk[["rev"]]
 
     ent_groups <-

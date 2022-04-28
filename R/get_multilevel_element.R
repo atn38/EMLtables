@@ -17,7 +17,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
     eml <- corpus[[i]]
     pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
-    id <- pk[["id"]]
+    id <- pk[["datasetid"]]
     rev <- pk[["rev"]]
 
     # dataset level
@@ -32,7 +32,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
       n <- ncol(ddf)
       cols <- c((n+1):(n+7), 1:n)
       ddf$scope <- scope
-     ddf$id <- id
+     ddf$datasetid <- id
       ddf$rev <- rev
       ddf$entity <- NA
       ddf$entitytype <- NA
@@ -67,7 +67,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
             n <- ncol(edf)
             cols <- c((n+1):(n+7), 1:n)
             edf$scope <- scope
-            edf$id <- id
+            edf$datasetid <- id
             edf$rev <- rev
             edf$entity <- paste0(j, x)
             edf$entitytype <- paste0(names(ent_groups)[[j]])
@@ -94,7 +94,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
                   n <- ncol(adf)
                   cols <- c((n+1):(n+7), 1:n)
                   adf$scope <- scope
-                  adf$id <- id
+                  adf$datasetid <- id
                   adf$rev <- rev
                   adf$entity <- paste0(j, x)
                   adf$entitytype <- paste0(names(ent_groups)[[j]])
@@ -114,7 +114,6 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
     vw[[i]] <-
       rbind(ddf, data.table::rbindlist(groupdf, fill = TRUE))
   }
-  return(data.table::rbindlist(vw, fill = TRUE))
   out <- data.table::rbindlist(vw, fill = TRUE)
   msgout(out)
   return(out)

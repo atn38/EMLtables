@@ -15,7 +15,7 @@ get_entities <- function(corpus) {
   for (i in seq_along(corpus)) {
     pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
-    id <- pk[["id"]]
+    id <- pk[["datasetid"]]
     rev <- pk[["rev"]]
 
     ent_groups <-
