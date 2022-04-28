@@ -53,11 +53,11 @@ parse_packageId <- function(full_id) {
      ) {
     x <- list(
       scope = sub("\\..*$", "", full_id), # string before first period
-      id = stringr::str_extract(full_id, "(?<=\\.)(.+)(?=\\.)"), # number between the two periods
+      datasetid = stringr::str_extract(full_id, "(?<=\\.)(.+)(?=\\.)"), # number between the two periods
       rev = sub(".*\\.", "", full_id) # number after second period
     )
   } else x <- list(scope = NA,
-                   id = full_id,
+                   datasetid = full_id,
                    rev = NA)
 
   return(x)
