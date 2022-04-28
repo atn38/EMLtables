@@ -24,6 +24,8 @@ handle_one <- function(x) {
 
 
 
+
+
 #' @param x
 
 null2na <- function(x) {
@@ -60,6 +62,40 @@ parse_packageId <- function(full_id) {
 
   return(x)
 }
+
+parse_generic <- function(x){
+
+  unlisted <- unlist(x,
+                     recursive = TRUE,
+                     use.names = TRUE)
+  names(unlisted) <- gsub(".+\\.+",
+                          "",
+                          names(unlisted))
+  as.data.frame(t(unlisted))
+}
+
+# parse_generic <- function(x) {
+#   df <- data.frame()
+#   if (!is.list(x)) {
+#
+#   } else {
+#   for (i in seq_along(x)) {
+#     if (!is.null(names(x)[[i]])) {
+#       df <- data.table::rbindlist(lapply(seq_along(x[[i]]), function(y){
+#         parse_generic(x[[i]])
+#       }))
+#     } else {
+#       unlisted <- unlist(x[[i]],
+#                          recursive = FALSE,
+#                          use.names = TRUE)
+#       names(unlisted) <- gsub(".+\\.+",
+#                               "",
+#                               names(unlisted))
+#       as.data.frame(t(unlisted))
+#     }
+#   }
+#   }
+# }
 
 #' Title
 #'
@@ -151,9 +187,7 @@ resolve_reference <- function(x, element_name, eml) {
             break
           }
         }
-
       }
-
     }
   }
   return(x)
