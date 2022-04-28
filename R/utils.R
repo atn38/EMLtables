@@ -23,7 +23,9 @@ handle_one <- function(x) {
 }
 
 
-
+msgout <- function(out) {
+  message(paste("    Returning", nrow(out), "rows."))
+}
 
 
 #' @param x
