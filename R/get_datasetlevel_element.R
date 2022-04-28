@@ -8,6 +8,8 @@
 #' @examples
 get_datasetlevel_element <-
   function(corpus, element_names, parse_function) {
+    e <- if (length(element_names) == 1) element_names else element_names[-1]
+    message(paste("Getting", e, "..."))
     vw <- list()
     for (i in seq_along(corpus)) {
       pk <- parse_packageId(names(corpus)[[i]])
@@ -30,5 +32,7 @@ get_datasetlevel_element <-
       }
       vw[[i]] <- ddf
     }
-    return(data.table::rbindlist(vw))
+    out <- data.table::rbindlist(vw)
+    msgout(out)
+    return(out)
   }

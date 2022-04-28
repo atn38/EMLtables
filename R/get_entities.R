@@ -7,6 +7,7 @@
 #'
 #' @examples
 get_entities <- function(corpus) {
+  message("Getting data entities...")
   vw_entities <- list()
   vw_atts <- list()
 
@@ -58,6 +59,9 @@ get_entities <- function(corpus) {
   }
 
   return(data.table::rbindlist(vw_entities, fill = TRUE))
+  out <- data.table::rbindlist(vw_entities, fill = TRUE)
+  msgout(out)
+  return(out)
 }
 
 #' Title

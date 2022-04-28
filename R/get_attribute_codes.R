@@ -7,6 +7,7 @@
 #'
 #' @examples
 get_attribute_codes <- function(corpus) {
+  message("Getting attribute enumeration and missing codes...")
   vw_codes <- list()
 
   for (i in seq_along(corpus)) {
@@ -57,7 +58,9 @@ get_attribute_codes <- function(corpus) {
     }
     vw_codes[[i]] <- data.table::rbindlist(groupdf, fill = TRUE)
   }
-  return(data.table::rbindlist(vw_codes, fill = TRUE)[, c(1:5, 10, 8:9, 6:7)]) # reorder cols
+  out <- data.table::rbindlist(vw_codes, fill = TRUE)[, c(1:5, 10, 8:9, 6:7)]
+  msgout(out)
+  return(out) # reorder cols
 }
 
 #' Title

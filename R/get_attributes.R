@@ -14,6 +14,7 @@
 #'
 #' @examples
 get_attributes <- function(corpus) {
+  message("Getting entity attributes...")
   vw_att <- list()
 
   for (i in seq_along(corpus)) {
@@ -61,7 +62,9 @@ get_attributes <- function(corpus) {
     }
     vw_att[[i]] <- data.table::rbindlist(groupdf, fill = TRUE)
   }
-  return(data.table::rbindlist(vw_att, fill = TRUE))
+  out <- data.table::rbindlist(vw_att, fill = TRUE)
+  msgout(out)
+  return(out)
 }
 
 

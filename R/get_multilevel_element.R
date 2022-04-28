@@ -11,6 +11,7 @@
 get_multilevel_element <- function(corpus, element_names, parse_function) {
   stopifnot(is.list(corpus), is.function(parse_function), is.character(element_names), length(element_names) >= 1)
   e <- if (length(element_names) == 1) element_names else element_names[-1]
+  message(paste("Getting", e, "..."))
   vw <- list()
   for (i in seq_along(corpus)) {
     eml <- corpus[[i]]
@@ -114,4 +115,7 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
       rbind(ddf, data.table::rbindlist(groupdf, fill = TRUE))
   }
   return(data.table::rbindlist(vw, fill = TRUE))
+  out <- data.table::rbindlist(vw, fill = TRUE)
+  msgout(out)
+  return(out)
 }
