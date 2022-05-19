@@ -1,102 +1,94 @@
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
 
 
+
+#' Title
+#'
+#' @param corpus
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_parties <- function(corpus) {
-  party_list <- list()
-  vw_parties <- data.frame()
+  vw <- list()
 
   # loop through each EML doc in corpus
   for (i in seq_along(corpus)) {
-    pk <- get_pk(names(corpus)[[i]])
+    pk <- parse_packageId(names(corpus)[[i]])
     scope <- pk[["scope"]]
-    id <- pk[["id"]]
+    id <- pk[["datasetid"]]
     rev <- pk[["rev"]]
 
-    parties <-
-      purrr::compact(corpus[[i]][["dataset"]][c("creator",
+    groups <-
+      c(purrr::compact(corpus[[i]][["dataset"]][c("creator",
                                                 "associatedParty",
                                                 "contact",
                                                 "publisher",
-                                                "metadataProvider")])
-
+                                                "metadataProvider")]),
+        purrr::compact(corpus[[i]][["dataset"]][["project"]]["personnel"]))
     # party_list <- c(party_list, parties)
+groupdf <- list()
+    for (j in seq_along(groups)) {
+      group <- handle_one(groups[[j]])
 
-    for (j in seq_along(parties)) {
-      party <- parties[[j]]
-      if (!is.null(names(party)))
-        party <- list(party)
-
-      for (k in seq_along(party)) {
-        entity <- party[[k]]
-
+      plist <- lapply(seq_along(group), function(x) {
+        person <- group[[x]]
         # get authorship order if creator
-        if (names(parties)[[j]] == "creator")
-          order <- paste0(j, k)
+        if (names(groups)[[j]] == "creator")
+          order <- paste0(j, x)
         else
           order <- NA
 
+        type <- names(groups)[[j]]
+        if (type == "personnel") type <- "project personnel"
         # get role if not associatedparty
-        if (names(parties)[[j]] != "associatedParty")
-          role <- names(parties)[[j]]
-        else if (names(parties)[[j]] == "associatedParty")
-          role <- na_if_null(entity[["role"]])
+        if (!type %in% c("personnel", "associatedParty")) role <- NA
+        else role <- null2na(person[["role"]])
 
-        first <-
-          na_if_null(handle_multiple(entity[["individualName"]][["givenName"]]))
-        sur <- na_if_null(entity[["individualName"]][["surName"]])
-        org <- na_if_null(entity[["organizationName"]])
+        pdf <- parse_party(person)
+        return(cbind(
+          data.frame(
+            id = id,
+            scope = scope,
+            rev = rev,
+            order = order,
+            type = type,
+            role = role
+          ),
+          pdf
+        ))
+      })
 
-        address <-
-          na_if_null(paste(entity[["address"]][["deliveryPoint"]], collapse = ", "))
-        city <- na_if_null(entity[["address"]][["city"]])
-        state <-
-          na_if_null(entity[["address"]][["administrativeArea"]])
-        country <- na_if_null(entity[["address"]][["country"]])
-        zip <- na_if_null(entity[["address"]][["postalCode"]])
-        phone <- na_if_null(handle_multiple(entity[["phone"]]))
-        email <-
-          na_if_null(handle_multiple(entity[["electronicMailAddress"]]))
-        web <- na_if_null(handle_multiple(entity[["onlineUrl"]]))
-
-        position <- na_if_null(entity[["positionName"]])
-
-        partydf <- data.frame(
-          scope = I(scope),
-          id = id,
-          rev = rev,
-          order = order,
-          role = I(role),
-          firstname = I(first),
-          surname = sur,
-          organization = org,
-          position = position,
-          address1 = address,
-          city = city,
-          state = state,
-          country = country,
-          zip = zip,
-          phone = phone,
-          email = I(email),
-          online_url = I(web),
-          stringsAsFactors = F
-        )
-
-        vw_parties <- rbind(vw_parties, partydf)
-      }
-
-
+      groupdf[[j]] <- data.table::rbindlist(plist, fill = TRUE)
     }
+vw[[i]] <- data.table::rbindlist(groupdf, fill = TRUE)
   }
-  return(vw_parties)
+  return(data.table::rbindlist(vw, fill = TRUE))
+}
+
+
+#' Title
+#'
+#' @param x (list) a responsible party node
+#'
+#' @return
+#'
+#' @examples
+parse_party <- function(x) {
+  data.frame(
+    # salutation = null2na(handle_multiple((x[["individualName"]][["salutation"]])),
+    firstname = I(null2na(handle_multiple(x[["individualName"]][["givenName"]]))),
+    surname = null2na(x[["individualName"]][["surName"]]),
+    organization = null2na(handle_multiple(x[["organizationName"]])),
+    position = null2na(handle_multiple(x[["positionName"]])),
+    address = null2na(paste(x[["address"]][["deliveryPoint"]], collapse = ", ")),
+    city = null2na(x[["address"]][["city"]]),
+    state = null2na(x[["address"]][["administrativeArea"]]),
+    country = null2na(x[["address"]][["country"]]),
+    zip = null2na(x[["address"]][["postalCode"]]),
+    phone = null2na(handle_multiple(x[["phone"]])),
+    email = I(null2na(handle_multiple(x[["electronicMailAddress"]]))),
+    online_url = I(null2na(handle_multiple(x[["onlineUrl"]]))),
+    stringsAsFactors = F
+  )
 }
