@@ -107,28 +107,30 @@ parse_generic <- function(x){
 #'
 #' @examples
 parse_text <- function(x) {
-  a <- type <- NA
-  if (is.character(x)) {
-    a <- x
-    type <- "plaintext"
-  }
-  if (is.list(x)) {
-    if ("markdown" %in% names(x)) {
-      a <- as.character(x[["markdown"]])
-      type <- "markdown"
-    } else {
-      a <- a[!names(a) %in% c("@context", "@type")]
-      a <- as.character(emld::as_xml(x))
-      a <- gsub("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", a)
-      a <- stringr::str_remove(a, ".*xsd\">")
-      a <- stringr::str_remove(a, "</eml:eml>")
-      substr(a, 1, 40) <- ""
-      type <- "docbook"
+  try({
+    a <- type <- NA
+    if (is.character(x)) {
+      a <- x
+      type <- "plaintext"
     }
-  } else {
-    a <- as.character(x)
-  }
-  return(list(text = a, type = type))
+    if (is.list(x)) {
+      if ("markdown" %in% names(x)) {
+        a <- as.character(x[["markdown"]])
+        type <- "markdown"
+      } else {
+        a <- a[!names(a) %in% c("@context", "@type")]
+        a <- as.character(emld::as_xml(x))
+        a <- gsub("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", a)
+        a <- stringr::str_remove(a, ".*xsd\">")
+        a <- stringr::str_remove(a, "</eml:eml>")
+        substr(a, 1, 40) <- ""
+        type <- "docbook"
+      }
+    } else {
+      a <- as.character(x)
+    }
+    return(list(text = a, type = type))
+  })
 }
 #' Title
 #'
