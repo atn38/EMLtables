@@ -1,7 +1,7 @@
 # pkEML
 pkEML
 
-A R package to convert Ecological Metadata Language (EML) documents to tables, and, optionally, normalizes them into tables suited for import into a relational database system, such as the LTER-core-metabase schema. Data managers can use pkEML to aid migration of their metadata archives, while researchers working on meta-analyses can use pkEML to quickly gather metadata details from a large set of datasets.  While pkEML was developed with the LTER network in mind, any users of the Ecological Metadata Language may find its functionality useful.
+A R package to convert Ecological Metadata Language (EML) documents to tables, and, optionally, normalizes them into tables suited for import into a relational database system, such as the LTER-core-metabase schema. Data managers can use pkEML to aid migration of their metadata archives, while researchers working on meta-analyses can use pkEML to quickly gather metadata details from a large set of datasets.  While pkEML was developed with the LTER network in mind, any EML users may find its functionalities useful.
 
 How to say "pkEML": spell out each letter. pk is meant to stand for primary key, but one can also intepret as peak-EML or pack-EML.
 
@@ -19,7 +19,7 @@ remotes::install_github("atn38/pkEML")
 library(pkEML)
 ```
 
-### Assemble a "corpus" of EML documents
+### Step 1: Assemble a "corpus" of EML documents
 
 A corpus of EML documents can correspond to a research program's metadata archives, or any set of assembled metadata documents. A corpus is the unit of 
 
@@ -33,7 +33,7 @@ This downloads into the specified directory all EML documents from the most rece
 
 If working with a more heterogeneous set, use your favorite method to download the EML documents into a directory.
 
-### Import the EML corpus into R
+### Step 2: Import the EML corpus into R
 
 ```
 emls <- import_corpus(path = getwd())
@@ -41,7 +41,7 @@ emls <- import_corpus(path = getwd())
 
 `import_corpus` outputs a nested list of EML documents represented under the `emld` format. Each list item is a EML document and named after the full packageId in the metadata body (not the .xml file name in the directory).
 
-### Convert EML corpus to tables
+### Step 3: Convert EML corpus to tables
 
 ```
 dfs <- EML2df(corpus = emls)
@@ -53,7 +53,7 @@ dfs <- EML2df(corpus = emls)
 dfs
 ```
 
-### Normalize tables 
+### Step 4: Normalize tables 
 
 ```
 tbls <- normalize(dfs)
