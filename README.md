@@ -59,9 +59,13 @@ dfs
 tbls <- normalize(dfs)
 ```
 
-### Customized usage of pkEML
+## Customized usage of pkEML
 
-One can stop at any point in the above sequence, of course. 
+### Stop when you have what you want
+
+One can stop at any point in the above sequence, of course. A logical place to stop would be after running `EML2df` on your EML corpus. At this point, you've got a set of rich tables to do a lot with.
+
+### Getting specific metadata elements
 
 `EML2df` simply wraps around a set of more granular `get_` functions. These are all exported functions and can be used to get specific metadata elements in table form:
 
@@ -69,6 +73,8 @@ One can stop at any point in the above sequence, of course.
 datasets <- get_datasets(corpus = emls)
 taxonomy <- get_coverage_tax(corpus = emls)
 ```
+
+### Getting a particular metadata element (that I didn't write a `get_` function for)
 
 Even more potentially powerful is the adaptable `get_multilevel_element` and `get_datasetlevel_element` functions. These take a EML corpus, an EML element name, and a parse function as arguments. For example, `get_coverage_geo` is actually just a wrapper around `get_multilevel_element`:
 
@@ -80,7 +86,11 @@ Even more potentially powerful is the adaptable `get_multilevel_element` and `ge
 # get_multilevel_element(corpus = emls, element_names = c("coverage", "geographicCoverage"), parse_function = parse_geocov) 
 ```
 
-Since `geographicCoverage` is an element that can be used to describe any combination of datasets, entities, and attribute in EML, `get_multilevel_element` grabs all occurrences of the `geographicalCoverage` node at each level, then runs them through the `parse_geocov` function. Ditto for `get_datasetlevel_element`, a very similar function but works only at the dataset level, since there are many EML elements unique to this level. It follows that a custom parse function can be written and passed to these adaptable functions, so that one can grab an EML element without a ready-made `get_` function.
+`geographicCoverage` is an element that can be used to describe any combination of datasets, entities, and attributes in EML. `get_multilevel_element` grabs all occurrences of the `geographicalCoverage` node at each level, then runs them through the `parse_geocov` function, while preserving the context of where each occurrence was -- which dataset, which entity, which attribute.
+
+Ditto for `get_datasetlevel_element`, a very similar function but works only at the dataset level, since there are many EML elements unique to this level. 
+
+To grab an EML element without a ready-made `get_` function, just write a custom parse function and pass to these generic functions!
 
 
 ## Getting help
