@@ -67,7 +67,7 @@ dfs <- EML2df(corpus = emls)
 `dfs` is a nested list of data.frames. Each data.frame will contain assembled information from all your datasets, each on key metadata groups such as dataset-level information, entity-level, attribute-level, attribute codes (enumeration and missing), geographical/temporal/taxonomic coverage, and so on. These data.frames are de-normalized, meaning all occurrences in EML are recorded and there may be loads of repeated information. For example, key personnel from your research program will be listed as contributors on many datasets, core sampling locations will be listed many times, and so on. 
 
 ```{r}
-str(dfs)
+head(dfs)
 ```
 
 ### Step 4: Normalize tables 
