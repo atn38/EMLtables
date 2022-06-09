@@ -1,9 +1,9 @@
 
 #' Title
 #'
-#' @param corpus
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) Table of change history metadata
 #' @export
 #'
 #' @examples
@@ -15,9 +15,9 @@ get_datasetlevel_element(corpus = corpus,
 
 #' Title
 #'
-#' @param x
+#' @param x (list) changeHistory node
 #'
-#' @return
+#' @return (data.frame) parsed change history
 #'
 #' @examples
 parse_changehistory <- function(x) {

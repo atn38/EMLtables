@@ -1,8 +1,8 @@
 #' Title
 #'
-#' @param corpus
+#' @param corpus (list) list of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) Table of annotation metadata from dataset, entity, and/or attribute
 #' @export
 #'
 #' @examples
@@ -12,9 +12,9 @@ get_annotations <- function(corpus) {
 
 #' Title
 #'
-#' @param x (list) annotation node
+#' @param x (list) single annotation node
 #'
-#' @return
+#' @return (data.frame) table of parsed annotation
 #'
 #' @examples
 parse_annotation <- function(x) {

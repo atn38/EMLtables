@@ -1,6 +1,6 @@
-#' Title
-#' @param corpus
-#' @return
+#' Get geographicCoverage
+#' @param corpus (list) List of EML documents, output from import_corpus
+#' @return (data.frame) Table of geographic coverage metadata
 #' @export
 get_coverage_geo <- function(corpus){
   get_multilevel_element(corpus = corpus,
@@ -8,11 +8,10 @@ get_coverage_geo <- function(corpus){
                          parse_function = parse_geocov)
 }
 
-#' Title
 #'
-#' @param x
+#' @param x (list) geographicCoverage node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_geocov <- function(x) {

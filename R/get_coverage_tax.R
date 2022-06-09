@@ -1,8 +1,8 @@
-#' Title
+#' Get taxonomic coverage
 #'
-#' @param corpus
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) table of taxonomic coverage metadata. Since taxonomicClassification can be recursively nested, each taxonomicClassification node gets its own row.
 #' @export
 #'
 #' @examples
@@ -14,11 +14,9 @@ get_coverage_tax <- function(corpus) {
   )
 }
 
-#' Title
+#' @param x (list) single taxonomicCoverage node
 #'
-#' @param x
-#'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_taxcov <- function(x) {

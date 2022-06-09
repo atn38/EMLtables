@@ -1,15 +1,8 @@
-
-
-
-
-
-
-
-#' Title
+#' Get attributes
 #'
-#' @param corpus
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) Table of attribute-level metadata items
 #' @export
 #'
 #' @examples
@@ -68,15 +61,10 @@ get_attributes <- function(corpus) {
 }
 
 
-
-
-
-#' Title
-#'
 #' @param eml
 #' @param x (list) attributeList EML node
 #'
-#' @return
+#' @return (data.frame) parsed attribute list
 #'
 #' @examples
 parse_attributeList <- function(x, eml = NULL) {
@@ -128,11 +116,6 @@ parse_attributeList <- function(x, eml = NULL) {
   return(attributes)
 }
 
-
-
-
-#' Title
-#'
 #' @param x (list) attribute EML node
 #'
 #' @return
