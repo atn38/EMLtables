@@ -28,13 +28,14 @@ parse_taxcov <- function(x) {
   ))
 }
 
-#' Title
+#' Recursively parse taxonomicClassification nodes
+#' @details Will keep calling itself on child taxonomicClassification nodes, until there are no more
 #'
-#' @param x
-#' @param i
-#' @param j
+#' @param x (list) one taxonomicClassification node
+#' @param i (numeric) a number denoting the position of the given taxonomicClassification within the big tree
+#' @param j (numeric) another number
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_taxonomic_classification <- function(x, i, j) {

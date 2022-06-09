@@ -1,9 +1,9 @@
 
-#' Title
+#' Get keywords
 #'
-#' @param corpus
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) parsed keywords
 #' @export
 #'
 #' @examples
@@ -11,11 +11,11 @@ get_keywords <- function(corpus) {
   get_datasetlevel_element(corpus, "keywordSet", parse_keywordset)
 }
 
-#' Title
+#' Parse keywordSet
 #'
-#' @param x
+#' @param x (list) single keywordSet node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_keywordset <- function(x) {
@@ -25,11 +25,11 @@ parse_keywordset <- function(x) {
   return(df)
 }
 
-#' Title
+#' Parse keyword
 #'
-#' @param x
+#' @param x (list) single keyword node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_keyword <- function(x) {

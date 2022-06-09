@@ -10,8 +10,8 @@ parse_packageId(full_id)
 \item{full_id}{(character) Package ID in EML style, e.g. "knb-lter-mcr.1.1"}
 }
 \value{
-List of three items: "scope", "id", "rev".
+List of three named items: "scope", "id", "rev".
 }
 \description{
-Take the packageId field in EML and break it down into scope, id, and revision number. If packageId does not conform to the scope, id, revision number pattern, the function will just return the whole ID in each field.
+Take the packageId field in EML and break it down into scope, id, and revision number. If packageId does not conform to the scope, id, revision number pattern, the function will just return the whole ID in the "id" field and NAs in the "scope" and "rev" fields.
 }

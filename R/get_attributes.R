@@ -1,4 +1,6 @@
-#' Get attributes
+#' Get attribute information
+#'
+#' @details This functions will loop through attribute nodes from attributeList nodes within all dataTable, spatialVector, spatialRaster, otherEntity, and view entities from datasets in the corpus. It outputs a table of parsed attribute information.
 #'
 #' @param corpus (list) List of EML documents, output from import_corpus
 #'

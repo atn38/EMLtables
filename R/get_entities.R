@@ -1,8 +1,10 @@
-#' Title
+#' Get information about entities
 #'
-#' @param corpus
+#' @details This function will loop through all dataTable, spatialVector, spatialRaster, otherEntity, and view nodes across datasets in the corpus and output a table with info about the entity itself: name, description, numberofRecords, objectName (aka file name), file size, hash value.
 #'
-#' @return
+#' @param corpus (list) List of EML documents, output from import_corpus
+#'
+#' @return (data.frame) Parsed entity metadata
 #' @export
 #'
 #' @examples

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_attributes.R
 \name{get_attributes}
 \alias{get_attributes}
-\title{Get attributes}
+\title{Get attribute information}
 \usage{
 get_attributes(corpus)
 }
@@ -13,5 +13,8 @@ get_attributes(corpus)
 (data.frame) Table of attribute-level metadata items
 }
 \description{
-Get attributes
+Get attribute information
+}
+\details{
+This functions will loop through attribute nodes from attributeList nodes within all dataTable, spatialVector, spatialRaster, otherEntity, and view entities from datasets in the corpus. It outputs a table of parsed attribute information.
 }

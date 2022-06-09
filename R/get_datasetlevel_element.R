@@ -1,8 +1,12 @@
-#' Title
+#' Get custom dataset-level metadata
 #'
-#' @param corpus
+#' @details this function will loop through all datasets in the supplied corpus and output a table of parsed metadata from the specified node according to the supplied parse function. Note that dataset-level here is meant different from dataset metadata that get_dataset() gets. Dataset-level refers to nodes that have child nodes in themselves, such as maintenance, but appear under dataset in a EML document.
 #'
-#' @return
+#' @param corpus (list) List of EML documents, output from import_corpus
+#' @param element_names (character) A string specifying the dataset-level. If the desired node is not an immediate child node of dataset, than supply a character vector to specify the xpath leading to the desired node. For example, to get geographicCoverage, say c("coverage", "geographicCoverage").
+#' @param parse_function (function) A parse function, taking a EML node and outputting a data.frame
+#'
+#' @return (data.frame) A table containing parsed metadata from the specified node according to the supplied parse function.
 #' @export
 #'
 #' @examples
