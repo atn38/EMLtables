@@ -1,8 +1,8 @@
-#' Title
+#' Get project information
 #'
-#' @param corpus
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) Table of project information
 #' @export
 #'
 #' @examples
@@ -10,11 +10,11 @@ get_project <- function(corpus) {
   get_datasetlevel_element(corpus, "project", parse_project)
 }
 
-#' Title
+#' parse project node
 #'
-#' @param x
+#' @param x (list) single project node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_project <- function(x){

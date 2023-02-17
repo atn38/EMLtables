@@ -1,11 +1,8 @@
-
-
-
-#' Title
+#' Get personnel
+#' @details This function will grab responsibleParty-type nodes from these nodes: creator, associatedParty, contact, publisher, metadataProvider, and project/personnel, and output a table of personnel information.
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @param corpus
-#'
-#' @return
+#' @return (data.frame) Table of personnel information: name, address, organization, role, position, email etc
 #' @export
 #'
 #' @examples
@@ -67,11 +64,11 @@ vw[[i]] <- data.table::rbindlist(groupdf, fill = TRUE)
 }
 
 
-#' Title
+#' parse responsible party
 #'
 #' @param x (list) a responsible party node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_party <- function(x) {

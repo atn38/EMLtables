@@ -1,8 +1,10 @@
 #' Convert a corpus of EML documents into tables
 #'
-#' @param path (character) Path to directory with EML documents in .xml file format.
+#' @details This is a simple wrapper around the get_ functions also exported from this package.
 #'
-#' @return (list) List of data.frames
+#' @param corpus (list) List of EML documents, output from import_corpus
+#'
+#' @return (list) List of data.frames each corresponding to output from a get_ function
 #' @export
 #'
 #' @examples

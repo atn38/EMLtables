@@ -65,6 +65,14 @@ parse_packageId <- function(full_id) {
   return(x)
 }
 
+#' A generic parse function
+#'
+#' @param x (list) node to parse
+#'
+#' @return (data.frame) Parsed node
+#' @export
+#'
+#' @examples
 parse_generic <- function(x){
 
   unlisted <- unlist(x,
@@ -99,7 +107,7 @@ parse_generic <- function(x){
 #   }
 # }
 
-#' Title
+#' Parse textType node
 #'
 #' @param x (list or character) text node
 #'
@@ -132,12 +140,12 @@ parse_text <- function(x) {
     return(list(text = a, type = type))
   })
 }
-#' Title
+#' Check if chain of descending element names is present in node
 #'
 #' @param x (list) node to check
 #' @param element_names (character) Name or vector of descending names to check
 #'
-#' @return
+#' @return (logical) TRUE if chain of element names are present in the node in that order, FALSE if not.
 #'
 #' @examples
 recursive_check <- function(x, element_names) {
@@ -168,13 +176,13 @@ remove_context <- function(x){
 
 }
 
-#' Title
+#' resolve reference in a node
 #'
 #' @param x (list) node of element
-#' @param eml (list) full EML doc
+#' @param eml (list) full EML document
 #' @param element_name (character) name of element
 #'
-#' @return
+#' @return (list) If the node contains a reference to some other element in the document, the function returns the same node, just with the reference replaced by the contents of the referenced node. If not, this returns the exact same node and does nothing to it.
 #'
 #' @examples
 resolve_reference <- function(x, element_name, eml) {
@@ -197,6 +205,14 @@ resolve_reference <- function(x, element_name, eml) {
   return(x)
 }
 
+#' Resolve all references in a EML document
+#'
+#' @param eml full EML document
+#'
+#' @return (list) full EML document with all references resolved and replaced with each respective referenced node
+#' @export
+#'
+#' @examples
 resolve_reference_all <- function(eml) {
   rrapply::rrapply(
     object = eml,

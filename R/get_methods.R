@@ -1,8 +1,8 @@
-#' Title
+#' Get methods
 #'
-#' @param x
+#' @param corpus (list) List of EML documents, output from import_corpus
 #'
-#' @return
+#' @return (data.frame) Table of methods
 #' @export
 #'
 #' @examples
@@ -12,11 +12,11 @@ get_methods <- function(corpus) {
                          parse_function = parse_methodstep)
 }
 
-#' Title
+#' Parse methodStep
 #'
-#' @param x
+#' @param x (list) single methodStep node
 #'
-#' @return
+#' @return (data.frame) parsed node
 #'
 #' @examples
 parse_methodstep <- function(x) {

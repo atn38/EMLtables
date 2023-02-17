@@ -25,8 +25,13 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
     if (recursive_check(eml[["dataset"]], element_names)) {
       da <- handle_one(eml[["dataset"]][[element_names]])
       ddf <-
-        data.table::rbindlist(lapply(seq_along(da), function(x)
-          cbind(data.frame(a = x), parse_function(da[[x]]))),
+        data.table::rbindlist(lapply(seq_along(da), function(x) {
+          # dax <- resolve_reference(x = da[[x]],
+          #                          element_name = e,
+          #                          eml = eml
+          cbind(data.frame(a = x), parse_function(da[[x]]))
+        }
+          ),
           fill = TRUE)
       names(ddf)[[1]] <- e
       n <- ncol(ddf)
@@ -60,8 +65,13 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
             # entity level
             ea <- handle_one(ent[[element_names]])
             edf <-
-              data.table::rbindlist(lapply(seq_along(ea), function(x)
-                cbind(data.frame(a = x), parse_function(ea[[x]]))),
+              data.table::rbindlist(lapply(seq_along(ea), function(x) {
+                # eax <- resolve_reference(x = ea[[x]],
+                #                          element_name = e,
+                #                          eml = eml)
+                cbind(data.frame(a = x), parse_function(ea[[x]]))
+              }
+                ),
                 fill = TRUE)
             names(edf)[[1]] <- e
             n <- ncol(edf)
@@ -87,8 +97,13 @@ get_multilevel_element <- function(corpus, element_names, parse_function) {
                 if (recursive_check(att, element_names)) {
                   aa <- handle_one(att[[element_names]])
                   adf <-
-                    data.table::rbindlist(lapply(seq_along(aa), function(x)
-                      cbind(data.frame(a = x), parse_function(aa[[x]]))),
+                    data.table::rbindlist(lapply(seq_along(aa), function(x) {
+                      # aax <- resolve_reference(x = aa[[x]],
+                      #                          element_name = e,
+                      #                          eml = eml)
+                      cbind(data.frame(a = x), parse_function(aa[[x]]))
+                    }
+                      ),
                       fill = TRUE)
                   names(adf)[[1]] <- e
                   n <- ncol(adf)
